@@ -2,7 +2,6 @@
 
 namespace core\entities;
 
-use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use yii\db\ActiveRecord;
 
 class Post extends ActiveRecord
@@ -12,23 +11,12 @@ class Post extends ActiveRecord
         return 'posts';
     }
 
-    public function behaviors()
+    public static function create($title, $description)
     {
-        return [
-            'saveRelations' => [
-                'class'     => SaveRelationsBehavior::className(),
-                'relations' => [
-                    'networks',
-                ],
-            ],
-        ];
-    }
-
-    public function transactions()
-    {
-        return [
-            self::SCENARIO_DEFAULT => self::OP_ALL,
-        ];
+        $post = new static();
+        $post->title = $title;
+        $post->description = $description;
+        return $post;
     }
 
     public function getImages()
