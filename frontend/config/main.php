@@ -13,6 +13,10 @@ return [
     'defaultRoute' => 'home/index',
     'controllerNamespace' => 'frontend\controllers',
     'language' => 'ru',
+    'aliases' => [
+        '@staticRoot' => $params['staticPath'],
+        '@static' => $params['staticHostInfo'],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
