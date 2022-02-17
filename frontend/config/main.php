@@ -10,7 +10,9 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'defaultRoute' => 'home/index',
     'controllerNamespace' => 'frontend\controllers',
+    'language' => 'ru',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -34,16 +36,16 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'home/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
