@@ -23,6 +23,20 @@ class PostService
         return $post;
     }
 
+    public function deleteImage($postId, $imageId)
+    {
+        $image = PostImages::findOne($imageId);
+        if ($image) {
+            $arr = explode('.', $image->image);
+            $extension = $arr[count($arr)-1];
+            if (unlink(\Yii::getAlias("@staticRoot/origin/posts/{$postId}/{$imageId}") . '.' . $extension)) {
+                $image->delete();
+                return true;
+            }
+        }
+        return false;
+    }
+
     private function transaction(Post $post, PostForm $form)
     {
         $transaction = \Yii::$app->getDb()->beginTransaction();

@@ -21,7 +21,6 @@ class PostImages extends ActiveRecord
         return $image;
     }
 
-
     public function getPost()
     {
         return $this->hasOne(Post::class, ['id' => 'post_id']);

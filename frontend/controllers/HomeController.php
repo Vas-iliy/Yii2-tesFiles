@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use core\entities\Post;
+use core\entities\PostImages;
 use core\forms\PostForm;
 use core\services\PostService;
 use yii\web\Controller;
@@ -46,8 +47,12 @@ class HomeController extends Controller
         }
         return $this->render('update', [
             'model' => $form,
-            'images' => $post->images,
+            'post' => $post,
         ]);
+    }
 
+    public function actionDeleteImage($id, $image_id)
+    {
+        $this->service->deleteImage($id, $image_id);
     }
 }

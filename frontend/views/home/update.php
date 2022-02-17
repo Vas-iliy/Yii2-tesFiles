@@ -5,13 +5,13 @@ use yii\helpers\Url;
 
 ?>
 <?=$this->render('_form', compact('model'))?>
-<?if(!empty($images)):?>
+<?if(!empty($post) && !empty($post->images)):?>
 <div class="container-fluid">
     <div class="row">
-        <?foreach ($images as $image):?>
+        <?foreach ($post->images as $image):?>
         <div class="col-6">
             <?=Html::img($image->getUploadedFileUrl('image'), ['class' => 'img-thumbnail'])?>
-            <a href="<?=Url::to(['delete-image', 'id' => $image->id])?>">Delete</a>
+            <a href="<?=Url::to(['delete-image', 'id' => $post->id, 'image_id' => $image->id])?>">Delete</a>
         </div>
         <?endforeach;?>
     </div>
