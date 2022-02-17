@@ -47,6 +47,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'home/index',
+                'update/<id:\d+>' => 'home/update',
+                'delete-image/<id:\d+>' => 'home/delete-image'
             ],
         ],
 

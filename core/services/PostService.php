@@ -11,12 +11,25 @@ class PostService
     public function create(PostForm $form)
     {
         $post = Post::create($form->title, $form->description);
+        $this->transaction($post, $form);
+        return $post;
+    }
+
+    public function edit($id, PostForm $form)
+    {
+        $post = Post::findOne($id);
+        $post->edit($form->title, $form->description);
+        $this->transaction($post, $form);
+        return $post;
+    }
+
+    private function transaction(Post $post, PostForm $form)
+    {
         $transaction = \Yii::$app->getDb()->beginTransaction();
         if (!$post->save() || !$this->createImages($form, $post)) {
             $transaction->rollBack();
         }
         $transaction->commit();
-        return $post;
     }
 
     private function createImages(PostForm $form, Post $post)

@@ -19,6 +19,12 @@ class Post extends ActiveRecord
         return $post;
     }
 
+    public function edit($title, $description)
+    {
+        $this->title = $title;
+        $this->description = $description;
+    }
+
     public function getImages()
     {
         return $this->hasMany(PostImages::class, ['post_id' => 'id']);

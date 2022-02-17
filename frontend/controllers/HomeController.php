@@ -36,4 +36,18 @@ class HomeController extends Controller
             'model' => $form,
         ]);
     }
+
+    public function actionUpdate($id)
+    {
+        $post = Post::findOne($id);
+        $form = new PostForm($post);
+        if ($form->load($this->request->post()) && $form->validate()) {
+            $this->service->edit($id,$form);
+        }
+        return $this->render('update', [
+            'model' => $form,
+            'images' => $post->images,
+        ]);
+
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace core\forms;
 
+use core\entities\Post;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -10,6 +11,16 @@ class PostForm extends Model
     public $title;
     public $description;
     public $images;
+    private $_post;
+
+    public function __construct(Post $post = null,$config = [])
+    {
+        if ($post) {
+            $this->title = $post->title;
+            $this->description = $post->description;
+        }
+        parent::__construct($config);
+    }
 
     public function rules()
     {
