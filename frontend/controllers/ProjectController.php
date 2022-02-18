@@ -3,33 +3,27 @@
 namespace frontend\controllers;
 
 use core\entities\Post;
-use core\entities\PostImages;
+use core\entities\Project;
 use core\forms\PostForm;
-use core\services\PostService;
+use core\forms\ProjectForm;
+use core\forms\ProjectUpdateForm;
+use core\services\ProjectService;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 class ProjectController extends Controller
 {
     private $service;
 
-    public function __construct($id, $module, PostService $service, $config = [])
+    public function __construct($id, $module, ProjectService $service, $config = [])
     {
         $this->service = $service;
         parent::__construct($id, $module, $config);
     }
 
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
     public function actionIndex()
     {
-        $form = new PostForm();
+        $form = new ProjectForm();
         if ($form->load($this->request->post()) && $form->validate()) {
             $this->service->create($form);
         }
@@ -40,19 +34,18 @@ class ProjectController extends Controller
 
     public function actionUpdate($id)
     {
-        $post = Post::findOne($id);
-        $form = new PostForm($post);
+        $project = Project::findOne($id);
+        $form = new ProjectUpdateForm($project);
         if ($form->load($this->request->post()) && $form->validate()) {
-            $this->service->edit($id,$form);
+            if (UploadedFile::getInstance($form, 'image')) {
+                $this->service->edit($id,$form);
+            } else {
+                $this->service->editNo($id, $form);
+            }
         }
         return $this->render('update', [
             'model' => $form,
-            'post' => $post,
+            'project' => $project,
         ]);
-    }
-
-    public function actionDeleteImage($id, $image_id)
-    {
-        $this->service->deleteImage($id, $image_id);
     }
 }

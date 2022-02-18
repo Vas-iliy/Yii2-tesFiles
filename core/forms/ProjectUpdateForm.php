@@ -7,11 +7,18 @@ use core\entities\Project;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
-class ProjectForm extends Model
+class ProjectUpdateForm extends Model
 {
     public $title;
     public $description;
     public $image;
+
+    public function __construct(Project $project, $config = [])
+    {
+        $this->title = $project->title;
+        $this->description = $project->description;
+        parent::__construct($config);
+    }
 
     public function rules()
     {
@@ -19,7 +26,7 @@ class ProjectForm extends Model
             [['title', 'description'], 'required'],
             [['description'], 'string'],
             [['title'], 'string', 'max' => 255],
-            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
     }
 

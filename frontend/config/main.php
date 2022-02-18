@@ -49,7 +49,12 @@ return [
             'rules' => [
                 '' => 'home/index',
                 'update/<id:\d+>' => 'home/update',
-                'delete-image/<id:\d+>/<image_id:\d+>' => 'home/delete-image'
+                'delete-image/<id:\d+>/<image_id:\d+>' => 'home/delete-image',
+                'project' => 'project/index',
+                'project/update/<id:\d+>' => 'project/update',
+                'project/delete-image/<id:\d+>' => 'project/delete-image',
+
+
             ],
         ],
 

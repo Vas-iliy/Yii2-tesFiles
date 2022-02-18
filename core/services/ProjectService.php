@@ -4,57 +4,61 @@ namespace core\services;
 
 use core\entities\Post;
 use core\entities\PostImages;
+use core\entities\Project;
 use core\forms\PostForm;
+use core\forms\ProjectForm;
+use core\forms\ProjectUpdateForm;
 
 class ProjectService
 {
-    public function create(PostForm $form)
+    public function create(ProjectForm $form)
     {
-        $post = Post::create($form->title, $form->description);
-        $this->transaction($post, $form);
-        return $post;
+        $project = Project::create(
+            $form->title, 
+            $form->description,
+            $form->image
+        );
+        $project->save();
+        
+        return $project;
     }
 
-    public function edit($id, PostForm $form)
+    public function edit($id, ProjectUpdateForm $form)
     {
-        $post = Post::findOne($id);
-        $post->edit($form->title, $form->description);
-        $this->transaction($post, $form);
-        return $post;
+        $project = Project::findOne($id);
+        $project->edit(
+            $form->title, 
+            $form->description,
+            $form->image
+        );
+        $project->save();
+
+        return $project;
     }
 
-    public function deleteImage($postId, $imageId)
+    public function editNo($id, ProjectUpdateForm $form)
     {
-        $image = PostImages::findOne($imageId);
-        if ($image) {
-            $arr = explode('.', $image->image);
+        $project = Project::findOne($id);
+        $project->noImage(
+            $form->title,
+            $form->description,
+        );
+        $project->save();
+
+        return $project;
+    }
+
+    public function deleteImage(Project $project)
+    {
+        if ($project) {
+            $arr = explode('.', $project->image);
             $extension = $arr[count($arr)-1];
-            if (unlink(\Yii::getAlias("@staticRoot/origin/posts/{$postId}/{$imageId}") . '.' . $extension)) {
-                $image->delete();
+            if (unlink(\Yii::getAlias("@staticRoot/origin/projects/{$project->id}") . '.' . $extension)) {
+                $project->image = null;
+                $project->save();
                 return true;
             }
         }
         return false;
     }
-
-    private function transaction(Post $post, PostForm $form)
-    {
-        $transaction = \Yii::$app->getDb()->beginTransaction();
-        if (!$post->save() || !$this->createImages($form, $post)) {
-            $transaction->rollBack();
-        }
-        $transaction->commit();
-    }
-
-    private function createImages(PostForm $form, Post $post)
-    {
-        foreach ($form->images as $image) {
-            $image = PostImages::create($image, $post->id);
-            if (!$image->save()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 }
